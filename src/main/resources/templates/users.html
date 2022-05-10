@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+
+</head>
+<body>
+<div>
+    <header th:insert="/paymentForm.html :: header"></header>
+</div>
+<br>
+<form th:action="@{/admin/users}" method="get" novalidate>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="search-result-box card-box">
+                    <div class="row">
+                        <div class="col-md-8 offset-md-2">
+                            <div class="pt-3 pb-4">
+                                <div class="input-group">
+                                    <input type="text" th:id="email" th:name="email" th:value="${email}" id="symbol"
+                                           name="" class="form-control" value="">
+                                    <div class="input-group-append">
+                                        <button type="submit" class="btn btn-primary btn-sm"><i
+                                                class="fa fa-search mr-1"></i> Search with email
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<br>
+<br>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th scope="col">Email</th>
+        <th scope="col">First name</th>
+        <th scope="col">Last name</th>
+        <th scope="col">Balance</th>
+        <th scope="col">Role</th>
+        <th scope="col">Blocked</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${users}">
+        <td th:text="${user.email}"></td>
+        <td th:text="${user.firstname}"></td>
+        <td th:text="${user.lastname}"></td>
+        <td>
+            <form th:action="@{/admin/changeUserBalance}" method="get" novalidate>
+                <div class="form-inline">
+                    <div class="col-xs-2">
+                        <input type="hidden" required="required" th:id="userId" th:name="userId" th:value="${user.id}">
+                        <input type="number" required="required"
+                               th:placeholder="${#numbers.formatDecimal(user.balance, 0, 2, 'POINT')}"
+                               th:id="balance" th:name="balance"
+                               class="form-control">
+                        <button class="btn btn-primary" type="submit">Set balance</button>
+                    </div>
+                </div>
+            </form>
+        </td>
+        <td th:if="${user.userRole == T(com.epam.rd.stock.exchange.model.enums.UserRole).USER}"><a
+                class="btn btn-primary"
+                th:href="@{'/admin/changeRole?userId=' + ${user.id} + '&role=ADMIN'}"
+                role="button">Set admin role</a></td>
+        <td th:if="${user.userRole == T(com.epam.rd.stock.exchange.model.enums.UserRole).ADMIN}"><a
+                class="btn btn-primary"
+                th:href="@{'/admin/changeRole?userId=' + ${user.id} + '&role=USER'}"
+                role="button">Set user role</a></td>
+        <td th:if="${user.blocked == false}"><a class="btn btn-primary"
+                                                th:href="@{'/admin/block?userId=' + ${user.id} + '&operation=true'}"
+                                                role="button">Block</a></td>
+        <td th:if="${user.blocked == true}"><a class="btn btn-primary"
+                                               th:href="@{'/admin/block?userId=' + ${user.id} + '&operation=false'}"
+                                               role="button">Unblock</a></td>
+    </tr>
+    </tbody>
+</table>
+<br>
+<div th:if="${totalPages > 1}">
+    <div class="row col-sm-10">
+        <div class="col-sm-2">
+            Total Rows: [[${totalItems}]]
+        </div>
+        <div class="col-sm-1">
+          <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+            <a th:if="${currentPage != i}"
+               th:href="@{'/admin/users?email=' + ${#objects.nullSafe(email, '')} + '&pageNumber=' + ${i}}">[[${i}]]</a>
+            <span th:unless="${currentPage != i}">[[${i}]]</span>  &nbsp; &nbsp;
+          </span>
+        </div>
+    </div>
+</div>
+</body>
+</html>

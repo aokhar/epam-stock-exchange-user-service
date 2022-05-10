@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec = "http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Header</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</head>
+<body>
+<header th:fragment="header" >
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="collapse navbar-collapse" id="navbarText">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" th:href="@{/}">Main</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" sec:authorize="hasAuthority('USER')" aria-current="page" th:href="@{/profile}" href="#">Profile <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" sec:authorize="hasAuthority('USER')" th:href="@{/wallet}" href="#">Wallet <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" sec:authorize="hasAuthority('USER')" th:href="@{/portfolio}" href="#">Portfolio <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" sec:authorize="hasAuthority('USER')" th:href="@{/orders}" href="#">Orders <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" sec:authorize="hasAuthority('ADMIN')" th:href="@{/admin/users}" href="#">Users <span class="sr-only">(current)</span></a>
+                </li>
+            </ul>
+            <span sec:authorize="hasAuthority('USER')" style="color:white;margin-right:1.25em;" class="navbar-text pull-right" th:text="${session?.email}">&nbsp;
+            </span>
+            <span sec:authorize="hasAuthority('USER')" style="color:white;margin-right:2.25em;" class="navbar-text pull-right" th:text="${'Balance: ' + #numbers.formatDecimal(session?.balance, 0, 2, 'POINT')}">&nbsp;
+            </span>
+            <a href="#" sec:authorize="isAuthenticated()" th:href="@{/logout}" class="navbar-brand pull-right"><strong>Logout</strong></a>
+            <a href="#" sec:authorize="isAnonymous()" th:href="@{/login}" class="navbar-brand pull-right"><strong>Login</strong></a>
+            <a href="#" sec:authorize="isAnonymous()" th:href="@{/registration}" class="navbar-brand pull-right"><strong>Registration</strong></a>
+        </div>
+    </nav>
+</header>
+
+</body>
+</html>
