@@ -1,11 +1,11 @@
 package com.epam.rd.stock.exchange.controller.unit;
 
-import com.epam.rd.stock.exchange.controller.StockController;
+import com.epam.rd.stock.exchange.controller.ValuableController;
 import com.epam.rd.stock.exchange.datagenerator.EntityGenerator;
-import com.epam.rd.stock.exchange.dto.StockViewDto;
+import com.epam.rd.stock.exchange.dto.ValuableViewDto;
 import com.epam.rd.stock.exchange.facade.StockFacade;
 import com.epam.rd.stock.exchange.handler.GlobalExceptionHandler;
-import com.epam.rd.stock.exchange.mapper.StockMapper;
+import com.epam.rd.stock.exchange.mapper.ValuableMapper;
 import com.epam.rd.stock.exchange.model.Stock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,19 +25,19 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 
-public class StockControllerTest {
+public class ValuableControllerTest {
 
     private MockMvc mockMvc;
 
     private StockFacade stockFacade = mock(StockFacade.class);
 
-    private Page<StockViewDto> pageStocks;
-    private StockMapper stockMapper;
+    private Page<ValuableViewDto> pageStocks;
+    private ValuableMapper valuableMapper;
 
     @BeforeEach
     public void init() {
         mockMvc = MockMvcBuilders
-                .standaloneSetup(new StockController(stockFacade))
+                .standaloneSetup(new ValuableController(stockFacade))
                 .setControllerAdvice(new GlobalExceptionHandler())
                 .build();
 
@@ -48,8 +48,8 @@ public class StockControllerTest {
         stockList.add(stock1);
         stockList.add(stock2);
         stockList.add(stock3);
-        stockMapper = new StockMapper();
-        pageStocks = stockMapper.toPageStockDto(new PageImpl<>(stockList));
+        valuableMapper = new ValuableMapper();
+        pageStocks = valuableMapper.toPageStockDto(new PageImpl<>(stockList));
     }
 
     @Test

@@ -27,13 +27,13 @@ public class OrderController {
     private final StockFacade stockFacade;
 
     @GetMapping("/order")
-    public String getNewOrderPage(Model model, @RequestParam String stockId) {
+    public String getNewOrderPage(Model model, @RequestParam String valuableId) {
         OrderCreateDto orderCreateDto = new OrderCreateDto();
-        if (stockId != null) {
-            orderCreateDto.setStockId(stockId);
+        if (valuableId != null) {
+            orderCreateDto.setValuableId(valuableId);
         }
         model.addAttribute("newOrder", orderCreateDto);
-        model.addAttribute("stock", stockFacade.findById(orderCreateDto.getStockId()));
+        model.addAttribute("valuable", stockFacade.findById(orderCreateDto.getValuableId()));
         return "newOrder";
     }
 
@@ -42,27 +42,12 @@ public class OrderController {
                               BindingResult bindingResult, Authentication auth, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("newOrder", orderCreateDto);
-            model.addAttribute("stock", stockFacade.findById(orderCreateDto.getStockId()));
+            model.addAttribute("valuable", stockFacade.findById(orderCreateDto.getValuableId()));
             return "newOrder";
         }
         orderCreateDto.setUserEmail(auth.getName());
         String orderId = orderFacade.submit(orderCreateDto);
-        orderFacade.process(orderId);
         return "redirect:/portfolio";
-    }
-
-    @GetMapping("/cancelOrder")
-    public String cancelOrder(@RequestParam String orderId) {
-        orderFacade.cancel(orderId);
-        return "redirect:/orders";
-    }
-
-    @ResponseBody
-    @GetMapping("/processOrders")
-    public void processOrders() {
-        log.info("Orders processing start...");
-        orderFacade.processAll();
-        log.info("Orders processing finished.");
     }
 
 }

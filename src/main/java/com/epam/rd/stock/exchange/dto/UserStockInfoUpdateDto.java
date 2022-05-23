@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class UserStockInfoUpdateDto {
     private String id;
-    private String stockId;
+    private String valuableId;
     private String userId;
     private Integer amountToSell;
     private BigDecimal stopLoss;

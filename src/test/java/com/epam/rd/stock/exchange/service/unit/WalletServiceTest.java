@@ -2,8 +2,6 @@ package com.epam.rd.stock.exchange.service.unit;
 
 import com.epam.rd.stock.exchange.datagenerator.EntityGenerator;
 import com.epam.rd.stock.exchange.exception.WalletNotFoundException;
-import com.epam.rd.stock.exchange.model.Wallet;
-import com.epam.rd.stock.exchange.repository.WalletRepository;
 import com.epam.rd.stock.exchange.service.WalletService;
 import com.epam.rd.stock.exchange.service.impl.WalletServiceImpl;
 import org.junit.jupiter.api.Assertions;

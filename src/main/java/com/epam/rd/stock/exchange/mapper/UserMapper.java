@@ -12,6 +12,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+
 @Component
 @RequiredArgsConstructor
 public class UserMapper {
@@ -23,6 +25,7 @@ public class UserMapper {
                 .email(userDTO.getEmail())
                 .actualEmail(toEmailWithoutDots(userDTO.getEmail()))
                 .password(passwordEncoder.encode(userDTO.getPassword()))
+                .balance(new BigDecimal(0))
                 .firstName(userDTO.getFirstname())
                 .lastName(userDTO.getLastname())
                 .role(UserRole.USER)
@@ -34,6 +37,7 @@ public class UserMapper {
                 .email(userDTO.getEmail())
                 .actualEmail(toEmailWithoutDots(userDTO.getEmail()))
                 .firstName(userDTO.getFirstname())
+                .balance(new BigDecimal(0))
                 .lastName(userDTO.getLastname())
                 .role(UserRole.USER)
                 .build();
@@ -62,6 +66,7 @@ public class UserMapper {
                 .id(user.getId())
                 .firstname(user.getFirstName())
                 .lastname(user.getLastName())
+                .balance(user.getBalance())
                 .email(user.getEmail())
                 .isBlocked(user.isBlocked())
                 .build();

@@ -7,15 +7,15 @@
 
     <changeSet id="7" author="Oleksii Kaliuha">
         <addForeignKeyConstraint baseColumnNames="user_id"
-                                 baseTableName="user_stock"
+                                 baseTableName="user_valuable"
                                  constraintName="fk_user_id"
                                  referencedColumnNames="id"
                                  referencedTableName="user"/>
-        <addForeignKeyConstraint baseColumnNames="stock_id"
-                                 baseTableName="user_stock"
-                                 constraintName="fk_stock_id"
+        <addForeignKeyConstraint baseColumnNames="valuable_id"
+                                 baseTableName="user_valuable"
+                                 constraintName="fk_valuable_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="stock"/>
+                                 referencedTableName="valuable"/>
     </changeSet>
 
     <changeSet id="8" author="Oleksii Kaliuha">
@@ -24,14 +24,14 @@
                                  constraintName="fk_orders_user_id"
                                  referencedColumnNames="id"
                                  referencedTableName="user"/>
-        <addForeignKeyConstraint baseColumnNames="stock_id"
+        <addForeignKeyConstraint baseColumnNames="valuable_id"
                                  baseTableName="orders"
-                                 constraintName="fk_orders_stock_id"
+                                 constraintName="fk_orders_valuable_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="stock"/>
+                                 referencedTableName="valuable"/>
         <addForeignKeyConstraint baseColumnNames="user_id"
-                                 baseTableName="wallet"
-                                 constraintName="fk_wallet_user_id"
+                                 baseTableName="user_card"
+                                 constraintName="fk_user_card_user_id"
                                  referencedColumnNames="id"
                                  referencedTableName="user"/>
     </changeSet>

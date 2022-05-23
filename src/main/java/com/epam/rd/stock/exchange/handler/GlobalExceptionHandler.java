@@ -5,7 +5,7 @@ import com.epam.rd.stock.exchange.exception.AuthenticationException;
 import com.epam.rd.stock.exchange.exception.EntityAlreadyExistsException;
 import com.epam.rd.stock.exchange.exception.OrderNotFoundException;
 import com.epam.rd.stock.exchange.exception.ProcessOrderException;
-import com.epam.rd.stock.exchange.exception.StockNotFoundException;
+import com.epam.rd.stock.exchange.exception.ValuableNotFoundException;
 import com.epam.rd.stock.exchange.exception.UserNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -48,7 +48,7 @@ public class GlobalExceptionHandler {
         return "redirect:/";
     }
 
-    @ExceptionHandler({StockNotFoundException.class})
+    @ExceptionHandler({ValuableNotFoundException.class})
     public final String handleStockExceptions(HttpServletRequest req,
                                               RedirectAttributes redirectAttributes,
                                               Exception ex) {

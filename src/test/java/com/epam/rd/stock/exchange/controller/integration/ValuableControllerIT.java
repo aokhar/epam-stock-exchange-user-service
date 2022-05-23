@@ -12,7 +12,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 
-public class StockControllerIT extends AbstractIntegrationTest {
+public class ValuableControllerIT extends AbstractIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;

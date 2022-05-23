@@ -11,6 +11,7 @@ import com.epam.rd.stock.exchange.model.Order;
 import com.epam.rd.stock.exchange.model.Stock;
 import com.epam.rd.stock.exchange.model.User;
 import com.epam.rd.stock.exchange.model.UserStockInfo;
+import com.epam.rd.stock.exchange.model.Valuable;
 import com.epam.rd.stock.exchange.model.enums.OrderStatus;
 import com.epam.rd.stock.exchange.model.enums.OrderType;
 import com.epam.rd.stock.exchange.service.OrderService;
@@ -44,14 +45,14 @@ public class OrderFacadeImpl implements OrderFacade {
     public String submit(OrderCreateDto orderCreateDto) {
         LocalDateTime timeSubmitted = LocalDateTime.now();
 
-        Stock stock = stockService.findById(orderCreateDto.getStockId());
+        Valuable stock = stockService.findById(orderCreateDto.getValuableId());
         User user = userService.findByEmail(orderCreateDto.getUserEmail());
 
         Order order = orderMapper.toOrder(stock, user, orderCreateDto);
 
-        order.setExpectedOrderPrice(calculateExpectedOrderPrice(orderCreateDto));
-        order.setTimeSubmitted(timeSubmitted);
-        order.setStatus(OrderStatus.ACTIVE);
+        order.setOrderPrice(calculateExpectedOrderPrice(orderCreateDto));
+        order.setValuablePrice(orderCreateDto.getValuablePrice());
+        order.setDateTime(timeSubmitted);
 
         return orderService.save(order).getId();
     }
@@ -60,13 +61,6 @@ public class OrderFacadeImpl implements OrderFacade {
     public OrderViewDto process(String orderId) {
         Order order = orderService.findById(orderId);
         return orderMapper.toOrderDto(processOrder(order));
-    }
-
-    @Override
-    public void cancel(String orderId) {
-        Order order = orderService.findById(orderId);
-        order.setStatus(OrderStatus.CANCELED);
-        orderService.save(order);
     }
 
     @Override

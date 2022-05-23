@@ -1,6 +1,6 @@
 package com.epam.rd.stock.exchange.service.impl;
 
-import com.epam.rd.stock.exchange.exception.UserStockInfoNotFoundException;
+import com.epam.rd.stock.exchange.exception.UserValuableInfoNotFoundException;
 import com.epam.rd.stock.exchange.model.UserStockInfo;
 import com.epam.rd.stock.exchange.repository.UserStockInfoRepository;
 import com.epam.rd.stock.exchange.service.UserStockInfoService;
@@ -38,7 +38,7 @@ public class UserStockInfoServiceImpl implements UserStockInfoService {
 
     @Override
     public UserStockInfo findById(String userStockInfoId) {
-        return userStockInfoRepository.findById(userStockInfoId).orElseThrow(() -> new UserStockInfoNotFoundException("UserStockInfo with id " + userStockInfoId + " not found."));
+        return userStockInfoRepository.findById(userStockInfoId).orElseThrow(() -> new UserValuableInfoNotFoundException("UserStockInfo with id " + userStockInfoId + " not found."));
     }
 
     @Override

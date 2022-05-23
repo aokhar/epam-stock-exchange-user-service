@@ -5,8 +5,8 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
-    <changeSet id="4" author="Oleksii Kaliuha">
-        <createTable tableName="orders">
+    <changeSet id="5" author="Oleksii Kaliuha">
+        <createTable tableName="user_valuables">
             <column name="id" type="char(36)">
                 <constraints primaryKey="true"/>
             </column>
@@ -17,14 +17,8 @@
                 <constraints nullable="false"/>
             </column>
             <column name="amount" type="int"/>
-            <column name="valuable_price" type="DECIMAL(12, 2)"/>
-            <column name="date_time" type="DATETIME(6)"/>
-            <column name="order_price" type="DECIMAL(12, 2)"/>
-            <column name="type" type="varchar(10)">
-                <constraints nullable="false"/>
-            </column>
+            <column name="amount_to_sell" type="int"/>
         </createTable>
     </changeSet>
-
 
 </databaseChangeLog>

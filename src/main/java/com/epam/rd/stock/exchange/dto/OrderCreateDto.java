@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderCreateDto {
-    private String stockId;
+    private String valuableId;
     private String userEmail;
     @NotNull(message = "Amount must not be blank!")
     @Positive(message = "Amount must be higher than 0!")
@@ -23,5 +23,5 @@ public class OrderCreateDto {
     private OrderType type;
     @NotNull(message = "Price must not be blank!")
     @Positive(message = "Price must be higher than 0!")
-    private BigDecimal expectedStockPrice;
+    private BigDecimal valuablePrice;
 }

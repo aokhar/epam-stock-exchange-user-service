@@ -1,7 +1,7 @@
 package com.epam.rd.stock.exchange.service.integration;
 
 import com.epam.rd.stock.exchange.datagenerator.EntityGenerator;
-import com.epam.rd.stock.exchange.exception.StockNotFoundException;
+import com.epam.rd.stock.exchange.exception.ValuableNotFoundException;
 import com.epam.rd.stock.exchange.model.Stock;
 import com.epam.rd.stock.exchange.repository.StockRepository;
 import com.epam.rd.stock.exchange.security.config.AbstractIntegrationTest;
@@ -54,7 +54,7 @@ public class StockServiceIT extends AbstractIntegrationTest {
         //When
 
         //Then
-        assertThrows(StockNotFoundException.class,
+        assertThrows(ValuableNotFoundException.class,
                 () -> sut.findById(stock.getId()));
     }
 

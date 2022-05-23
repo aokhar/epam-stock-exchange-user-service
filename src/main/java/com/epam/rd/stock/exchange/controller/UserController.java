@@ -7,7 +7,6 @@ import com.epam.rd.stock.exchange.dto.UserViewDto;
 import com.epam.rd.stock.exchange.facade.OrderFacade;
 import com.epam.rd.stock.exchange.facade.UserFacade;
 import com.epam.rd.stock.exchange.facade.WalletFacade;
-import com.epam.rd.stock.exchange.model.enums.OrderStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -110,16 +109,15 @@ public class UserController {
     }
 
     @GetMapping("/orders")
-    public String getOrdersByStatusPaginated(@RequestParam(name = "pageNumber", required = false) Integer pageNumber, @RequestParam(name = "status", required = false) OrderStatus status, Model model, Authentication auth) {
+    public String getOrdersByStatusPaginated(@RequestParam(name = "pageNumber", required = false) Integer pageNumber, Model model, Authentication auth) {
         pageNumber = pageNumber == null ? 1 : pageNumber;
         UserViewDto user = userFacade.findByEmail(auth.getName());
-        Page<OrderViewDto> ordersPage = orderFacade.findByUserIdAndStatus(user.getId(), status, pageNumber, pageSize);
+        Page<OrderViewDto> ordersPage = orderFacade.findByUserIdAndStatus(user.getId(), pageNumber, pageSize);
         List<OrderViewDto> ordersStatus = ordersPage.getContent();
         model.addAttribute("currentPage", pageNumber);
         model.addAttribute("totalPages", ordersPage.getTotalPages());
         model.addAttribute("totalItems", ordersPage.getTotalElements());
         model.addAttribute("orders", ordersStatus);
-        model.addAttribute("status", status);
         return "orders";
     }
 

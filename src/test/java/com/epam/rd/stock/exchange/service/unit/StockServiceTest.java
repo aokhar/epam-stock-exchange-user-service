@@ -1,7 +1,7 @@
 package com.epam.rd.stock.exchange.service.unit;
 
 import com.epam.rd.stock.exchange.datagenerator.EntityGenerator;
-import com.epam.rd.stock.exchange.exception.StockNotFoundException;
+import com.epam.rd.stock.exchange.exception.ValuableNotFoundException;
 import com.epam.rd.stock.exchange.model.Stock;
 import com.epam.rd.stock.exchange.repository.StockRepository;
 import com.epam.rd.stock.exchange.service.StockService;
@@ -55,7 +55,7 @@ public class StockServiceTest {
         when(repository.findById(stock.getId())).thenReturn(Optional.empty());
 
         //When + Then
-        Assertions.assertThrows(StockNotFoundException.class, () -> service.findById(stock.getId()));
+        Assertions.assertThrows(ValuableNotFoundException.class, () -> service.findById(stock.getId()));
     }
 
     @Test

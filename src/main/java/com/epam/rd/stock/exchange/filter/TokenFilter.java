@@ -6,6 +6,7 @@ import com.epam.rd.stock.exchange.exception.UserBlockedException;
 import com.epam.rd.stock.exchange.facade.UserFacade;
 import com.epam.rd.stock.exchange.facade.WalletFacade;
 import com.epam.rd.stock.exchange.mapper.UserMapper;
+import com.epam.rd.stock.exchange.model.User;
 import com.epam.rd.stock.exchange.service.AuthenticationService;
 import com.epam.rd.stock.exchange.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
@@ -92,8 +93,9 @@ public class TokenFilter extends OncePerRequestFilter {
         CsrfToken csrfToken = (CsrfToken) request.getAttribute(CSRF_TOKEN_ATTRIBUTE);
         try {
             String userId = jwtTokenUtil.getUserIdFromToken(csrfToken.getToken(), request);
-            String email = userFacade.findById(userId).getEmail();
-            BigDecimal balance = walletFacade.findByUserId(userId).getBalance();
+            UserViewDto user = userFacade.findById(userId);
+            String email = user.getEmail();
+            BigDecimal balance = user.getBalance();
             HttpSession session = request.getSession();
             session.setAttribute("email", email);
             session.setAttribute("balance", balance);

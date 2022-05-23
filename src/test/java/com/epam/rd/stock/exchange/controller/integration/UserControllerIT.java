@@ -2,9 +2,6 @@ package com.epam.rd.stock.exchange.controller.integration;
 
 import com.epam.rd.stock.exchange.datagenerator.EntityGenerator;
 import com.epam.rd.stock.exchange.dto.ChangeWalletBalanceDto;
-import com.epam.rd.stock.exchange.mapper.WalletMapper;
-import com.epam.rd.stock.exchange.model.Wallet;
-import com.epam.rd.stock.exchange.repository.WalletRepository;
 import com.epam.rd.stock.exchange.security.config.AbstractIntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,13 +1,12 @@
 package com.epam.rd.stock.exchange.controller.unit;
 
-import com.epam.rd.stock.exchange.controller.UserStockInfoController;
 import com.epam.rd.stock.exchange.datagenerator.EntityGenerator;
-import com.epam.rd.stock.exchange.dto.StockViewDto;
+import com.epam.rd.stock.exchange.dto.ValuableViewDto;
 import com.epam.rd.stock.exchange.dto.UserStockInfoUpdateDto;
 import com.epam.rd.stock.exchange.facade.StockFacade;
 import com.epam.rd.stock.exchange.facade.UserStockInfoFacade;
 import com.epam.rd.stock.exchange.handler.GlobalExceptionHandler;
-import com.epam.rd.stock.exchange.mapper.StockMapper;
+import com.epam.rd.stock.exchange.mapper.ValuableMapper;
 import com.epam.rd.stock.exchange.mapper.UserStockInfoMapper;
 import com.epam.rd.stock.exchange.model.Stock;
 import com.epam.rd.stock.exchange.model.User;
@@ -36,7 +35,7 @@ public class UserStockInfoControllerTest {
 
     private UserStockInfoUpdateDto userStockInfoUpdateDto;
 
-    private StockViewDto stockViewDto;
+    private ValuableViewDto valuableViewDto;
 
     @BeforeEach
     public void init() {
@@ -51,21 +50,21 @@ public class UserStockInfoControllerTest {
                 .build();
 
         UserStockInfoMapper userStockInfoMapper = new UserStockInfoMapper();
-        StockMapper stockMapper = new StockMapper();
+        ValuableMapper valuableMapper = new ValuableMapper();
         User user = EntityGenerator.generateDomainUser();
         Stock stock = EntityGenerator.generateDomainStock();
         UserStockInfo userStockInfo = EntityGenerator.generateUserStockInfo();
         userStockInfo.setUser(user);
         userStockInfo.setStock(stock);
         userStockInfoUpdateDto = userStockInfoMapper.toUserStockInfoUpdateDto(userStockInfo);
-        stockViewDto = stockMapper.toStockDto(stock);
+        valuableViewDto = valuableMapper.toStockDto(stock);
     }
 
     @Test
     public void shouldGetUpdateUserStockInfoPage() throws Exception {
         //GIVEN
         when(userStockInfoFacade.findById(userStockInfoUpdateDto.getId())).thenReturn(userStockInfoUpdateDto);
-        when(stockFacade.findById(userStockInfoUpdateDto.getStockId())).thenReturn(stockViewDto);
+        when(stockFacade.findById(userStockInfoUpdateDto.getStockId())).thenReturn(valuableViewDto);
 
         //WHEN + THEN
         mockMvc.perform(get("/updateUserStockInfo").param("userStockInfoId", userStockInfoUpdateDto.getId()))

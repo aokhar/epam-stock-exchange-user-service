@@ -1,8 +1,7 @@
 package com.epam.rd.stock.exchange.dto;
 
-import com.epam.rd.stock.exchange.model.Stock;
 import com.epam.rd.stock.exchange.model.User;
-import com.epam.rd.stock.exchange.model.enums.OrderStatus;
+import com.epam.rd.stock.exchange.model.Valuable;
 import com.epam.rd.stock.exchange.model.enums.OrderType;
 import lombok.Builder;
 import lombok.Data;
@@ -17,23 +16,16 @@ public class OrderViewDto {
 
     private User user;
 
-    private Stock stock;
+    private Valuable valuable;
 
     private Integer amount;
 
-    private OrderStatus status;
+    private BigDecimal orderPrice;
 
-    private BigDecimal expectedOrderPrice;
-
-    private BigDecimal expectedStockPrice;
-
-    private BigDecimal actualOrderPrice;
+    private BigDecimal valuablePrice;
 
     private OrderType type;
 
-    private LocalDateTime timeSubmitted;
+    private LocalDateTime dateTime;
 
-    private LocalDateTime timeProcessed;
-
-    private String failDescription;
 }

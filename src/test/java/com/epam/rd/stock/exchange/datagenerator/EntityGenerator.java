@@ -5,7 +5,6 @@ import com.epam.rd.stock.exchange.model.Order;
 import com.epam.rd.stock.exchange.model.Stock;
 import com.epam.rd.stock.exchange.model.User;
 import com.epam.rd.stock.exchange.model.UserStockInfo;
-import com.epam.rd.stock.exchange.model.Wallet;
 import com.epam.rd.stock.exchange.model.enums.OrderStatus;
 import com.epam.rd.stock.exchange.model.enums.OrderType;
 import com.epam.rd.stock.exchange.model.enums.StockType;

@@ -3,11 +3,11 @@ package com.epam.rd.stock.exchange.controller.unit;
 import com.epam.rd.stock.exchange.controller.OrderController;
 import com.epam.rd.stock.exchange.datagenerator.EntityGenerator;
 import com.epam.rd.stock.exchange.dto.OrderCreateDto;
-import com.epam.rd.stock.exchange.dto.StockViewDto;
+import com.epam.rd.stock.exchange.dto.ValuableViewDto;
 import com.epam.rd.stock.exchange.facade.OrderFacade;
 import com.epam.rd.stock.exchange.facade.StockFacade;
 import com.epam.rd.stock.exchange.handler.GlobalExceptionHandler;
-import com.epam.rd.stock.exchange.mapper.StockMapper;
+import com.epam.rd.stock.exchange.mapper.ValuableMapper;
 import com.epam.rd.stock.exchange.model.Order;
 import com.epam.rd.stock.exchange.model.Stock;
 import com.epam.rd.stock.exchange.model.User;
@@ -38,10 +38,10 @@ public class OrderControllerTest {
 
     private OrderFacade orderFacade = mock(OrderFacade.class);
 
-    private StockMapper stockMapper = mock(StockMapper.class);
+    private ValuableMapper valuableMapper = mock(ValuableMapper.class);
 
     private OrderCreateDto orderCreateDto;
-    private StockViewDto stockViewDto;
+    private ValuableViewDto valuableViewDto;
     private User user;
     private Stock stock;
     private Order order;
@@ -53,23 +53,23 @@ public class OrderControllerTest {
                 .setControllerAdvice(new GlobalExceptionHandler())
                 .build();
 
-        stockMapper = new StockMapper();
+        valuableMapper = new ValuableMapper();
         user = EntityGenerator.generateDomainUser();
         stock = EntityGenerator.generateDomainStock();
         order = EntityGenerator.generateDomainOrder();
         order.setStock(stock);
         order.setUser(user);
-        stockViewDto = stockMapper.toStockDto(stock);
+        valuableViewDto = valuableMapper.toStockDto(stock);
         orderCreateDto = toOrderCreateDto(order);
     }
 
     @Test
     public void shouldReturnNewOrderPage() throws Exception {
         //Given
-        when(stockFacade.findById(stockViewDto.getId())).thenReturn(stockViewDto);
+        when(stockFacade.findById(valuableViewDto.getId())).thenReturn(valuableViewDto);
 
         //When + Then
-        mockMvc.perform(get("/order").param("stockId", stockViewDto.getId()))
+        mockMvc.perform(get("/order").param("stockId", valuableViewDto.getId()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("newOrder"))
                 .andExpect(model().attributeExists("stock", "newOrder"));
@@ -78,7 +78,7 @@ public class OrderControllerTest {
     @Test
     public void shouldSubmitOrderWithWrongModelAndGetError() throws Exception {
         //Given
-        when(stockFacade.findById(stockViewDto.getId())).thenReturn(stockViewDto);
+        when(stockFacade.findById(valuableViewDto.getId())).thenReturn(valuableViewDto);
         orderCreateDto.setAmount(-1);
 
         //When + Then

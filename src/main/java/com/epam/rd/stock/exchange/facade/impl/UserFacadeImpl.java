@@ -2,7 +2,7 @@ package com.epam.rd.stock.exchange.facade.impl;
 
 import com.epam.rd.stock.exchange.dto.UserCreateDto;
 import com.epam.rd.stock.exchange.dto.UserSignInDto;
-import com.epam.rd.stock.exchange.dto.UserStockInfoViewDto;
+import com.epam.rd.stock.exchange.dto.UserValuableInfoViewDto;
 import com.epam.rd.stock.exchange.dto.UserViewAdminDto;
 import com.epam.rd.stock.exchange.dto.UserViewDto;
 import com.epam.rd.stock.exchange.exception.AuthenticationException;
@@ -11,7 +11,6 @@ import com.epam.rd.stock.exchange.facade.UserFacade;
 import com.epam.rd.stock.exchange.mapper.UserMapper;
 import com.epam.rd.stock.exchange.mapper.UserStockInfoMapper;
 import com.epam.rd.stock.exchange.model.User;
-import com.epam.rd.stock.exchange.model.Wallet;
 import com.epam.rd.stock.exchange.model.enums.UserRole;
 import com.epam.rd.stock.exchange.service.UserService;
 import com.epam.rd.stock.exchange.service.WalletService;
@@ -84,7 +83,6 @@ public class UserFacadeImpl implements UserFacade {
             user = userService.findByEmail(userCreateDto.getEmail());
         } catch (UserNotFoundException e) {
             user = userService.save(userMapper.toUserSocial(userCreateDto));
-            walletService.save(createWalletForNewUser(user.getId()));
         }
         return userMapper.toUserViewDto(user);
     }
@@ -93,31 +91,23 @@ public class UserFacadeImpl implements UserFacade {
     public UserViewDto findByEmail(String email) {
         User user = userService.findByEmail(email);
         UserViewDto userViewDto = userMapper.toUserViewDto(user);
-        List<UserStockInfoViewDto> userStockInfoViewDtoList = user.getStocks()
+        List<UserValuableInfoViewDto> userValuableInfoViewDtoList = user.getStocks()
                 .stream().map(userStockInfoMapper::toUserStockInfoViewDto).collect(Collectors.toList());
-        userViewDto.setStocks(userStockInfoViewDtoList);
+        userViewDto.setValuables(userValuableInfoViewDtoList);
         return userViewDto;
     }
 
     @Override
     public UserViewDto registration(UserCreateDto userCreateDto) {
         User user = userService.save(userMapper.toUser(userCreateDto));
-        walletService.save(createWalletForNewUser(user.getId()));
         return userMapper.toUserViewDto(user);
-    }
-
-    private Wallet createWalletForNewUser(String userId) {
-        Wallet wallet = new Wallet();
-        wallet.setBalance(registrationBonus);
-        wallet.setUserId(userId);
-        return wallet;
     }
 
     private Page<UserViewAdminDto> updateUsersBalances(Page<UserViewAdminDto> users, Pageable pageable) {
         List<UserViewAdminDto> usersList = users.getContent();
         for (int i = 0; i < usersList.size(); i++) {
             String userId = usersList.get(i).getId();
-            usersList.get(i).setBalance(walletService.findByUserId(userId).getBalance());
+            usersList.get(i).setBalance(userService.findById(userId).getBalance());
         }
         return new PageImpl<>(usersList, pageable, users.getTotalElements());
     }

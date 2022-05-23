@@ -1,6 +1,6 @@
 package com.epam.rd.stock.exchange.service.impl;
 
-import com.epam.rd.stock.exchange.exception.StockNotFoundException;
+import com.epam.rd.stock.exchange.exception.ValuableNotFoundException;
 import com.epam.rd.stock.exchange.model.Stock;
 import com.epam.rd.stock.exchange.repository.StockRepository;
 import com.epam.rd.stock.exchange.service.StockService;
@@ -23,7 +23,7 @@ public class StockServiceImpl implements StockService {
     @Override
     public Stock findById(String id) {
         return stockRepository.findById(id).orElseThrow(() ->
-                new StockNotFoundException("Stock with id " + id + " does not exist.")
+                new ValuableNotFoundException("Stock with id " + id + " does not exist.")
         );
     }
 }

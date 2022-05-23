@@ -1,5 +1,6 @@
 package com.epam.rd.stock.exchange.dto;
 
+import com.epam.rd.stock.exchange.model.enums.ValuableType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,13 +12,12 @@ import java.math.BigDecimal;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserStockInfoViewDto {
+public class UserValuableInfoViewDto {
     private String id;
     private String symbol;
+    private ValuableType type;
     private BigDecimal price;
     private BigDecimal trend;
     private Integer amount;
-    private BigDecimal stopLoss;
-    private BigDecimal takeProfit;
     private Integer amountToSell;
 }

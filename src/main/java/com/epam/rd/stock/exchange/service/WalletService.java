@@ -1,7 +1,5 @@
 package com.epam.rd.stock.exchange.service;
 
-import com.epam.rd.stock.exchange.model.Wallet;
-
 import java.math.BigDecimal;
 
 public interface WalletService {

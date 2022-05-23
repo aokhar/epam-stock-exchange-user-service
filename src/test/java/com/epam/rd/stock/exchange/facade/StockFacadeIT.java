@@ -1,7 +1,7 @@
 package com.epam.rd.stock.exchange.facade;
 
 import com.epam.rd.stock.exchange.datagenerator.EntityGenerator;
-import com.epam.rd.stock.exchange.dto.StockViewDto;
+import com.epam.rd.stock.exchange.dto.ValuableViewDto;
 import com.epam.rd.stock.exchange.model.Stock;
 import com.epam.rd.stock.exchange.repository.StockRepository;
 import com.epam.rd.stock.exchange.security.config.AbstractIntegrationTest;
@@ -36,13 +36,13 @@ public class StockFacadeIT extends AbstractIntegrationTest {
         Stock repoStock = stockRepository.save(stock);
 
         // When
-        StockViewDto newStockViewDto = stockFacade.findById(repoStock.getId());
+        ValuableViewDto newValuableViewDto = stockFacade.findById(repoStock.getId());
 
         // Then
-        assertNotNull(newStockViewDto);
-        assertEquals(newStockViewDto.getPrice(), repoStock.getPrice());
-        assertEquals(newStockViewDto.getSymbol(), repoStock.getSymbol());
-        assertEquals(newStockViewDto.getTrend(), repoStock.getTrend());
+        assertNotNull(newValuableViewDto);
+        assertEquals(newValuableViewDto.getPrice(), repoStock.getPrice());
+        assertEquals(newValuableViewDto.getSymbol(), repoStock.getSymbol());
+        assertEquals(newValuableViewDto.getTrend(), repoStock.getTrend());
     }
 
     @Test
@@ -51,7 +51,7 @@ public class StockFacadeIT extends AbstractIntegrationTest {
         Stock repoStock = stockRepository.save(stock);
 
         // When
-        Page<StockViewDto> stockViewDto = stockFacade.findStocksBySymbol(repoStock.getSymbol(), 1, pageable.getPageSize());
+        Page<ValuableViewDto> stockViewDto = stockFacade.findStocksBySymbol(repoStock.getSymbol(), 1, pageable.getPageSize());
 
         // Then
         assertEquals(stockViewDto.getContent().size(), 1);

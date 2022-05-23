@@ -1,7 +1,7 @@
 package com.epam.rd.stock.exchange.controller.integration;
 
 import com.epam.rd.stock.exchange.datagenerator.EntityGenerator;
-import com.epam.rd.stock.exchange.dto.StockViewDto;
+import com.epam.rd.stock.exchange.dto.ValuableViewDto;
 import com.epam.rd.stock.exchange.facade.StockFacade;
 import com.epam.rd.stock.exchange.model.Stock;
 import com.epam.rd.stock.exchange.repository.StockRepository;
@@ -40,10 +40,10 @@ public class OrderControllerIT extends AbstractIntegrationTest {
         Stock repoStock = stockRepository.save(stock);
 
         //When
-        StockViewDto stockViewDto = stockFacade.findById(repoStock.getId());
+        ValuableViewDto valuableViewDto = stockFacade.findById(repoStock.getId());
 
         //Then
-        mockMvc.perform(get("/order").param("stockId", stockViewDto.getId()))
+        mockMvc.perform(get("/order").param("stockId", valuableViewDto.getId()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("newOrder"))
                 .andExpect(model().attributeExists("stock", "newOrder"));

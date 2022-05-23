@@ -46,9 +46,6 @@
             <td th:text="${stock.price}"></td>
             <td th:text="${stock.trend}"></td>
             <td th:text="${stock.amount}"></td>
-            <td th:text="${stock.stopLoss}"></td>
-            <td th:text="${stock.takeProfit}"></td>
-            <td th:text="${stock.amountToSell}"></td>
             <td><a class="btn btn-primary" th:href="@{/updateUserStockInfo(userStockInfoId=${stock.id})}" role="button">Set take-profit/stop-loss</a></td>
         </tr>
         </tbody>

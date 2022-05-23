@@ -3,18 +3,18 @@ package com.epam.rd.stock.exchange.mapper;
 import com.epam.rd.stock.exchange.dto.OrderCreateDto;
 import com.epam.rd.stock.exchange.dto.OrderViewDto;
 import com.epam.rd.stock.exchange.model.Order;
-import com.epam.rd.stock.exchange.model.Stock;
+import com.epam.rd.stock.exchange.model.Valuable;
 import com.epam.rd.stock.exchange.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 @Component
 public class OrderMapper {
-    public Order toOrder(Stock stock, User user, OrderCreateDto orderCreateDto) {
+    public Order toOrder(Valuable valuable, User user, OrderCreateDto orderCreateDto) {
         return Order.builder()
                 .amount(orderCreateDto.getAmount())
-                .expectedStockPrice(orderCreateDto.getExpectedStockPrice())
-                .stock(stock)
+                .valuablePrice(orderCreateDto.getValuablePrice())
+                .valuable(valuable)
                 .user(user)
                 .type(orderCreateDto.getType())
                 .build();
@@ -23,17 +23,13 @@ public class OrderMapper {
     public OrderViewDto toOrderDto(Order order) {
         return OrderViewDto.builder()
                 .id(order.getId())
-                .stock(order.getStock())
+                .valuable(order.getValuable())
                 .user(order.getUser())
-                .actualOrderPrice(order.getActualOrderPrice())
-                .expectedStockPrice(order.getExpectedStockPrice())
-                .expectedOrderPrice(order.getExpectedOrderPrice())
-                .status(order.getStatus())
+                .orderPrice(order.getOrderPrice())
+                .valuablePrice(order.getValuablePrice())
                 .type(order.getType())
                 .amount(order.getAmount())
-                .timeSubmitted(order.getTimeSubmitted())
-                .timeProcessed(order.getTimeProcessed())
-                .failDescription(order.getFailDescription())
+                .dateTime(order.getDateTime())
                 .build();
     }
 

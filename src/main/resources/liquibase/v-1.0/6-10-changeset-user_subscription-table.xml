@@ -5,21 +5,26 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
-    <changeSet id="3" author="Oleksii Kaliuha">
-        <createTable tableName="stock">
+    <changeSet id="4" author="Oleksii Kaliuha">
+        <createTable tableName="orders">
             <column name="id" type="char(36)">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="symbol" type="varchar(16)">
-                <constraints nullable="false" unique="true"/>
+            <column name="user_id" type="char(36)">
+                <constraints nullable="false"/>
             </column>
-            <column name="name" type="char(60)"/>
-            <column name="price" type="DECIMAL(12, 2)"/>
-            <column name="trend" type="DECIMAL(12, 2)"/>
-            <column name="stock_type" type="varchar(10)">
+            <column name="valuable_id" type="char(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="amount" type="int"/>
+            <column name="valuable_price" type="DECIMAL(12, 2)"/>
+            <column name="date_time" type="DATETIME(6)"/>
+            <column name="order_price" type="DECIMAL(12, 2)"/>
+            <column name="type" type="varchar(10)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
     </changeSet>
+
 
 </databaseChangeLog>

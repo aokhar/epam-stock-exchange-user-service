@@ -1,14 +1,13 @@
 package com.epam.rd.stock.exchange.facade.impl;
 
-import com.epam.rd.stock.exchange.dto.StockViewDto;
+import com.epam.rd.stock.exchange.dto.ValuableViewDto;
 import com.epam.rd.stock.exchange.exception.ProcessOrderException;
 import com.epam.rd.stock.exchange.facade.StockFacade;
-import com.epam.rd.stock.exchange.mapper.StockMapper;
-import com.epam.rd.stock.exchange.model.Stock;
+import com.epam.rd.stock.exchange.mapper.ValuableMapper;
+import com.epam.rd.stock.exchange.model.Valuable;
 import com.epam.rd.stock.exchange.model.User;
 import com.epam.rd.stock.exchange.model.UserStockInfo;
 import com.epam.rd.stock.exchange.model.Order;
-import com.epam.rd.stock.exchange.model.Wallet;
 import com.epam.rd.stock.exchange.service.StockService;
 import com.epam.rd.stock.exchange.service.UserStockInfoService;
 import com.epam.rd.stock.exchange.service.WalletService;
@@ -28,31 +27,30 @@ public class StockFacadeImpl implements StockFacade {
     private final StockService stockService;
     private final UserStockInfoService userStockInfoService;
     private final WalletService walletService;
-    private final StockMapper stockMapper;
+    private final ValuableMapper valuableMapper;
 
     @Override
-    public Page<StockViewDto> findStocksBySymbol(String symbol, int page, int size) {
+    public Page<ValuableViewDto> findStocksBySymbol(String symbol, int page, int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
-        return stockMapper.toPageStockDto(stockService.findStocksBySymbol(symbol, pageable));
+        return valuableMapper.toPageStockDto(stockService.findStocksBySymbol(symbol, pageable));
     }
 
     @Override
     @Transactional
     public UserStockInfo buy(Order order) {
         User user = order.getUser();
-        Stock stock = order.getStock();
+        Valuable valuable = order.getValuable();
         UserStockInfo userStockInfo = userStockInfoService.findUserStockInfo
-                (user.getId(), stock.getId());
-        Wallet wallet = walletService.findByUserId(user.getId());
+                (user.getId(), valuable.getId());
 
-        boolean enoughMoney = wallet.getBalance().doubleValue() >= order.getActualOrderPrice().doubleValue();
+        boolean enoughMoney = user.getBalance().doubleValue() >= order.getActualOrderPrice().doubleValue();
         if (enoughMoney) {
             if (userStockInfo != null) {
                 Integer newAmount = userStockInfo.getAmount() + order.getAmount();
                 userStockInfo.setAmount(newAmount);
             } else {
                 userStockInfo = UserStockInfo.builder()
-                        .stock(stock)
+                        .stock(valuable)
                         .user(user)
                         .amount(order.getAmount())
                         .build();
@@ -61,7 +59,7 @@ public class StockFacadeImpl implements StockFacade {
             throw new ProcessOrderException("User doesn't have enough money for this order.");
         }
         userStockInfoService.save(userStockInfo);
-        walletService.changeBalance(user.getId(), order.getActualOrderPrice().multiply(BigDecimal.valueOf(-1)));
+        walletService.changeBalance(user.getId(), order.getOrderPrice().multiply(BigDecimal.valueOf(-1)));
         return userStockInfo;
     }
 
@@ -70,7 +68,7 @@ public class StockFacadeImpl implements StockFacade {
     public UserStockInfo sell(Order order) {
         User user = order.getUser();
         UserStockInfo userStockInfo = userStockInfoService.findUserStockInfo
-                (user.getId(), order.getStock().getId());
+                (user.getId(), order.getValuable().getId());
         if (userHasEnoughStocks(userStockInfo, order)) {
             int newAmount = userStockInfo.getAmount() - order.getAmount();
             if (newAmount == 0) {
@@ -82,13 +80,13 @@ public class StockFacadeImpl implements StockFacade {
         } else {
             throw new ProcessOrderException("User doesn't have enough stocks for this order.");
         }
-        walletService.changeBalance(user.getId(), order.getActualOrderPrice());
+        walletService.changeBalance(user.getId(), order.getOrderPrice());
         return userStockInfo;
     }
 
     @Override
-    public StockViewDto findById(String stockId) {
-        return stockMapper.toStockDto(stockService.findById(stockId));
+    public ValuableViewDto findById(String stockId) {
+        return valuableMapper.toStockDto(stockService.findById(stockId));
     }
 
     private boolean userHasEnoughStocks(UserStockInfo userStockInfo, Order order) {
