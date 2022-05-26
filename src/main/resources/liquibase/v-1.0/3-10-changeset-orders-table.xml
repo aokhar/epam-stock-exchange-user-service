@@ -16,11 +16,15 @@
             <column name="valuable_id" type="char(36)">
                 <constraints nullable="false"/>
             </column>
-            <column name="amount" type="int"/>
+            <column name="amount" type="DECIMAL(12, 4)"/>
             <column name="valuable_price" type="DECIMAL(12, 2)"/>
             <column name="date_time" type="DATETIME(6)"/>
             <column name="order_price" type="DECIMAL(12, 2)"/>
             <column name="type" type="varchar(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fail_description" type="varchar(255)"/>
+            <column name="status" type="varchar(10)">
                 <constraints nullable="false"/>
             </column>
         </createTable>

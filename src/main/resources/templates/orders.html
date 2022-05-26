@@ -18,7 +18,7 @@
 </head>
 <body>
 <div>
-    <header th:insert="/paymentForm.html :: header"></header>
+    <header th:insert="/header.html :: header"></header>
 </div>
 <br>
 <div class='wrapper text-center'>
@@ -26,9 +26,6 @@
         <a href="#" th:href="@{'/orders'}" class="btn btn-primary btn-sm" aria-current="page">All</a>
         <a href="#" th:href="@{'/orders?status=SUCCESS'}" class="btn btn-primary btn-sm">Success</a>
         <a href="#" th:href="@{'/orders?status=FAIL'}" class="btn btn-primary btn-sm">Failure</a>
-        <a href="#" th:href="@{'/orders?status=ACTIVE'}" class="btn btn-primary btn-sm">Active</a>
-        <a href="#" th:href="@{'/orders?status=CANCELED'}" class="btn btn-primary btn-sm">Canceled</a>
-
     </div>
 </div>
 <br>
@@ -38,27 +35,23 @@
         <th scope="col">Stock</th>
         <th scope="col">Amount</th>
         <th scope="col">Expected order price</th>
-        <th th:if="${status == T(com.epam.rd.stock.exchange.model.enums.OrderStatus).ACTIVE}" scope="col">Expected stock price</th>
+        <th th:if="${status == T(com.epam.rd.stock.exchange.model.enums.OrderStatus).SUCCESS}" scope="col">Valuable Price</th>
         <th scope="col">Status</th>
         <th scope="col">Time submitted</th>
         <th scope="col">Type</th>
-        <th th:if="${status == T(com.epam.rd.stock.exchange.model.enums.OrderStatus).ACTIVE}" scope="col">Return</th>
         <th th:if="${status == T(com.epam.rd.stock.exchange.model.enums.OrderStatus).FAIL}" scope="col">Fail description</th>
-
     </tr>
     </thead>
     <tbody>
     <tr th:each="order : ${orders}">
-        <td th:text="${order.stock.getSymbol()}"></td>
+        <td th:text="${order.valuable.getSymbol()}"></td>
         <td th:text="${order.amount}"></td>
-        <td th:text="${#numbers.formatDecimal(order.expectedOrderPrice, 0, 2, 'POINT')}"></td>
-        <td th:if="${status == T(com.epam.rd.stock.exchange.model.enums.OrderStatus).ACTIVE}" th:text="${order.stock.price}"></td>
+        <td th:text="${#numbers.formatDecimal(order.orderPrice, 0, 2, 'POINT')}"></td>
+        <td th:if="${status == T(com.epam.rd.stock.exchange.model.enums.OrderStatus).SUCCESS}" th:text="${order.valuable.price}"></td>
         <td th:text="${order.status}"></td>
-        <td th:text="${#temporals.format(order.timeSubmitted, 'dd-MM-yyyy HH:mm')}"></td>
+        <td th:text="${#temporals.format(order.dateTime, 'dd-MM-yyyy HH:mm:ss')}"></td>
         <td th:text="${order.type}"></td>
-        <td th:if="${status == T(com.epam.rd.stock.exchange.model.enums.OrderStatus).ACTIVE}"><a class="btn btn-primary" th:href="@{'/cancelOrder?orderId=' + ${order.id}}" role="button">Cancel order</a></td>
         <td th:if="${status == T(com.epam.rd.stock.exchange.model.enums.OrderStatus).FAIL}" th:text="${order.failDescription}"></td>
-
     </tr>
     </tbody>
 </table>

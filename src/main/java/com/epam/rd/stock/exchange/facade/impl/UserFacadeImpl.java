@@ -1,19 +1,22 @@
 package com.epam.rd.stock.exchange.facade.impl;
 
-import com.epam.rd.stock.exchange.dto.UserCreateDto;
-import com.epam.rd.stock.exchange.dto.UserSignInDto;
-import com.epam.rd.stock.exchange.dto.UserValuableInfoViewDto;
-import com.epam.rd.stock.exchange.dto.UserViewAdminDto;
-import com.epam.rd.stock.exchange.dto.UserViewDto;
+import com.epam.rd.stock.exchange.dto.*;
+import com.epam.rd.stock.exchange.dto.enums.ChangeBalanceType;
 import com.epam.rd.stock.exchange.exception.AuthenticationException;
+import com.epam.rd.stock.exchange.exception.NotEnoughBalanceException;
 import com.epam.rd.stock.exchange.exception.UserNotFoundException;
 import com.epam.rd.stock.exchange.facade.UserFacade;
 import com.epam.rd.stock.exchange.mapper.UserMapper;
-import com.epam.rd.stock.exchange.mapper.UserStockInfoMapper;
+import com.epam.rd.stock.exchange.mapper.UserValuableInfoMapper;
+import com.epam.rd.stock.exchange.model.BalanceUpdateHistory;
+import com.epam.rd.stock.exchange.model.Card;
 import com.epam.rd.stock.exchange.model.User;
+import com.epam.rd.stock.exchange.model.enums.BalanceUpdateType;
 import com.epam.rd.stock.exchange.model.enums.UserRole;
+import com.epam.rd.stock.exchange.service.BalanceUpdateHistoryService;
 import com.epam.rd.stock.exchange.service.UserService;
-import com.epam.rd.stock.exchange.service.WalletService;
+import com.epam.rd.stock.exchange.service.CardService;
+import com.epam.rd.stock.exchange.util.CardValidationUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -22,8 +25,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,16 +40,13 @@ public class UserFacadeImpl implements UserFacade {
 
     private final UserService userService;
 
-    private final UserStockInfoMapper userStockInfoMapper;
+    private final UserValuableInfoMapper userValuableInfoMapper;
 
     private final UserMapper userMapper;
 
     private final PasswordEncoder passwordEncoder;
 
-    private final WalletService walletService;
-
-    @Value("${registration.bonus}")
-    private BigDecimal registrationBonus;
+    private final BalanceUpdateHistoryService balanceUpdateHistoryService;
 
     @Override
     public UserViewDto findById(String id) {
@@ -51,20 +55,28 @@ public class UserFacadeImpl implements UserFacade {
     }
 
     @Override
-    public void updateBlockingStatus(String email, boolean isBlocked) {
-        userService.updateBlockingStatus(email, isBlocked);
-    }
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    public BigDecimal updateBalance(String email, ChangeBalanceDto changeBalanceDto) {
+        CardValidationUtil.validateUserCard(changeBalanceDto);
+        User user = userService.findByEmail(email);
+        BigDecimal balanceUpdate = changeBalanceDto.getSum();
+        BalanceUpdateType type = BalanceUpdateType.TOPUP;
+        if(changeBalanceDto.getChangeBalanceType().equals(ChangeBalanceType.WITHDRAW)){
+            verifyUserBalance(user.getBalance(), balanceUpdate);
+            balanceUpdate = balanceUpdate.multiply(BigDecimal.valueOf(-1));
+            type = BalanceUpdateType.WITHDRAW;
+        }
+        userService.updateBalance(user.getId(), balanceUpdate);
+        BalanceUpdateHistory newBalanceUpdateHistory = BalanceUpdateHistory.builder()
+                        .update(balanceUpdate)
+                        .type(type)
+                        .userId(user.getId())
+                        .card(changeBalanceDto.getCard())
+                        .dateTime(LocalDateTime.now())
+                        .build();
 
-    @Override
-    public Page<UserViewAdminDto> findAllUsersByEmail(String email, int page, int size) {
-        Pageable pageable = PageRequest.of(page - 1, size);
-        Page<UserViewAdminDto> list = userMapper.toUserViewAdminDtoPage(userService.findAllUsersByEmail(email, pageable));
-        return updateUsersBalances(list, pageable);
-    }
-
-    @Override
-    public void updateRole(String email, UserRole userRole) {
-        userService.updateRole(email, userRole);
+       balanceUpdateHistoryService.save(newBalanceUpdateHistory);
+       return balanceUpdate;
     }
 
     @Override
@@ -91,8 +103,8 @@ public class UserFacadeImpl implements UserFacade {
     public UserViewDto findByEmail(String email) {
         User user = userService.findByEmail(email);
         UserViewDto userViewDto = userMapper.toUserViewDto(user);
-        List<UserValuableInfoViewDto> userValuableInfoViewDtoList = user.getStocks()
-                .stream().map(userStockInfoMapper::toUserStockInfoViewDto).collect(Collectors.toList());
+        List<UserValuableInfoViewDto> userValuableInfoViewDtoList = user.getValuables()
+                .stream().map(userValuableInfoMapper::toUserValuableInfoViewDto).collect(Collectors.toList());
         userViewDto.setValuables(userValuableInfoViewDtoList);
         return userViewDto;
     }
@@ -103,12 +115,11 @@ public class UserFacadeImpl implements UserFacade {
         return userMapper.toUserViewDto(user);
     }
 
-    private Page<UserViewAdminDto> updateUsersBalances(Page<UserViewAdminDto> users, Pageable pageable) {
-        List<UserViewAdminDto> usersList = users.getContent();
-        for (int i = 0; i < usersList.size(); i++) {
-            String userId = usersList.get(i).getId();
-            usersList.get(i).setBalance(userService.findById(userId).getBalance());
+    private void verifyUserBalance(BigDecimal userBalance, BigDecimal balanceUpdate){
+        if(userBalance.compareTo(balanceUpdate) < 0){
+            throw new NotEnoughBalanceException("User don't have enough balance to withdraw");
         }
-        return new PageImpl<>(usersList, pageable, users.getTotalElements());
     }
+
+
 }

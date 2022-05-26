@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Alerts</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+
+</head>
+<body>
+<div>
+    <header th:insert="/header.html :: header"></header>
+</div>
+<br>
+<div class='wrapper text-center'>
+    <div class="btn-group">
+        <form method="post" th:action="@{/submitAll}" >
+            <button type="submit" class="btn btn-primary btn-sm" aria-current="page">Submit all</button>
+        </form>
+    </div>
+</div>
+<br>
+<div class="row">
+    <div class="col-sm-4" th:each="notification : ${notifications}">
+    <div class="card" >
+        <div class="card-body">
+            <h1 class="card-title" align="center" th:text="${#temporals.format(notification.dateTime, 'dd-MM-yyyy HH:mm:ss')}"></h1>
+            <p class="card-text"><font th:text="${notification.message}"></font></p>
+            <div class="btn-group">
+                <form method="post" th:action="@{/submit}" >
+                    <input hidden th:value="${notification.id}" name="alertId">
+                    <button type="submit" class="btn btn-primary btn-sm" aria-current="page">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+<br>
+<div th:if="${totalPages > 1}">
+    <div class="row col-sm-10">
+        <div class="col-sm-2">
+            Total Rows: [[${totalItems}]]
+        </div>
+        <div class="col-sm-1">
+					<span th:each="i: ${#numbers.sequence(1, totalPages)}">
+						<a th:if="${currentPage != i}" th:href="@{'/alerts?&pageNumber=' + ${i}}">[[${i}]]</a>
+						<span th:unless="${currentPage != i}">[[${i}]]</span>  &nbsp; &nbsp;
+					</span>
+        </div>
+    </div>
+</div>
+</body>
+</html>

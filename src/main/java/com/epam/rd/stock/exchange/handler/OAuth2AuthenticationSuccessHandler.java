@@ -1,8 +1,10 @@
 package com.epam.rd.stock.exchange.handler;
 
 import com.epam.rd.stock.exchange.dto.UserCreateDto;
+import com.epam.rd.stock.exchange.dto.UserSignInDto;
 import com.epam.rd.stock.exchange.facade.UserFacade;
 import com.epam.rd.stock.exchange.mapper.UserMapper;
+import com.epam.rd.stock.exchange.service.AuthenticationService;
 import com.epam.rd.stock.exchange.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -25,6 +27,8 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
 
     private final JwtTokenUtil jwtTokenUtil;
 
+    private final AuthenticationService authenticationService;
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response,
@@ -36,7 +40,12 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
         userFacade.signInWithSocialNetwork(userCreateDto);
         String userId = userFacade.findByEmail(userCreateDto.getEmail()).getId();
         jwtTokenUtil.createAndAddTokenIntoSession(userId, request);
-        response.sendRedirect("/profile");
+        UserSignInDto userSignInDto = UserSignInDto.builder()
+                        .email(userCreateDto.getEmail())
+                        .password("")
+                        .build();
+        authenticationService.authenticateUser(userSignInDto);
+        response.sendRedirect("/portfolio");
     }
 
 }

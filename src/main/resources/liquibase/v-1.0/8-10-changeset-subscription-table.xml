@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="9" author="Oleksii Kaliuha">
+        <createTable tableName="subscription">
+            <column name="id" type="char(36)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="fail_safe" type="bit(1)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="amount" type="DECIMAL(12,4)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="reserve" type="bit(1)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="varchar2(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="char(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="valuable_id" type="char(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="subscription_condition_id" type="char(36)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+
+</databaseChangeLog>

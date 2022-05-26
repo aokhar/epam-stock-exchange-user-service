@@ -6,7 +6,7 @@
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
     <changeSet id="6" author="Oleksii Kaliuha">
-        <createTable tableName="user_card">
+        <createTable tableName="card">
             <column name="id" type="char(36)">
                 <constraints primaryKey="true"/>
             </column>

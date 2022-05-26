@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Subscription</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+
+</head>
+<body>
+<div>
+    <header th:insert="/header.html :: header"></header>
+</div>
+<br>
+<div class='wrapper text-center'>
+    <div class="btn-group">
+        <a href="#" th:href="@{'/subscriptions'}" class="btn btn-primary btn-sm">ALL</a>
+        <a href="#" th:href="@{'/subscriptions?type=SELL'}" class="btn btn-primary btn-sm">SELL</a>
+        <a href="#" th:href="@{'/subscriptions?type=BUY'}" class="btn btn-primary btn-sm">BUY</a>
+        <a href="#" th:href="@{'/subscriptions?type=INFORM'}" class="btn btn-primary btn-sm">INFORM</a>
+    </div>
+</div>
+<br>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th scope="col">Valuable</th>
+        <th scope="col">Valuable Type</th>
+        <th scope="col">Type</th>
+        <th scope="col">Amount</th>
+        <th scope="col">Condition</th>
+        <th scope="col">Fail safe</th>
+        <th scope="col">Continuos</th>
+        <th scope="col">Reserve</th>
+        <th scope="col">Delete</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="subscription : ${subscriptions}">
+        <td th:text="${subscription.symbol}"></td>
+        <td th:text="${subscription.valuableType}"></td>
+        <td th:text="${subscription.type}"></td>
+        <td th:text="${subscription.amount}"></td>
+        <td th:text="${subscription.condition}"></td>
+        <td th:text="${subscription.failSafe}"></td>
+        <td th:text="${subscription.continuos}"></td>
+        <td th:text="${subscription.reserve}"></td>
+        <td>
+            <form method="post" th:action="@{/removeSubscription}">
+                <input name="subscriptionId" th:value="${subscription.id}" hidden>
+                <input type="submit" value="Delete"/>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<br>
+<div th:if = "${totalPages > 1}">
+    <div class = "row col-sm-10">
+        <div class = "col-sm-2">
+            Total Rows: [[${totalItems}]]
+        </div>
+        <div class = "col-sm-1">
+          <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+            <a th:if="${currentPage != i}" th:href="@{'/subscriptions?type=' + ${type} + '&pageNumber=' + ${i}}">[[${i}]]</a>
+            <span th:unless="${currentPage != i}">[[${i}]]</span>  &nbsp; &nbsp;
+          </span>
+        </div>
+    </div>
+</div>
+</body>
+</html>

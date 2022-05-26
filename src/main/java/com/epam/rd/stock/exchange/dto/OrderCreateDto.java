@@ -15,13 +15,12 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderCreateDto {
-    private String valuableId;
     private String userEmail;
+    @NotNull(message = "Valuable id must not be blank")
+    private String valuableId;
     @NotNull(message = "Amount must not be blank!")
     @Positive(message = "Amount must be higher than 0!")
-    private Integer amount;
+    private BigDecimal amount;
+    @NotNull(message = "Order type must not be blank!")
     private OrderType type;
-    @NotNull(message = "Price must not be blank!")
-    @Positive(message = "Price must be higher than 0!")
-    private BigDecimal valuablePrice;
 }

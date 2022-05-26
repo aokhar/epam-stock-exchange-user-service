@@ -19,7 +19,7 @@
 </head>
 <body>
 <div>
-    <header th:insert="/paymentForm.html :: header"></header>
+    <header th:insert="/header.html :: header"></header>
 </div>
 <br>
 <form th:action="@{/}" method="get" novalidate>
@@ -48,24 +48,32 @@
     </div>
 </form>
 <br>
-<div class="card-columns" style="column-count: 3;">
-    <div class="card" th:each="stock : ${stocks}">
+<div class="row">
+    <div class="col-sm-4"th:each="valuable : ${valuables}">
+    <div class="card">
         <div class="card-body">
-            <h1 class="card-title" align="center" th:text="${stock.getSymbol}"></h1>
-            <p class="card-text"><font th:text="${stock.getName}"></font></p>
+            <h1 class="card-title" align="center" th:text="${valuable.getSymbol}"></h1>
+            <p class="card-text"><font th:text="${valuable.getName}"></font></p>
             <p class="card-text">
-                <span th:if="${stock.type == T(com.epam.rd.stock.exchange.model.enums.StockType).STOCK}">Stock</span>
-                <span th:if="${stock.type == T(com.epam.rd.stock.exchange.model.enums.StockType).INDEX}">Stock index</span>
-            <p class="card-text">Current price: <font th:text="${stock.getPrice}"></font> $ </p>
-            <p class="card-text">Trend : <font th:text="${stock.getTrend}"></font>
-                <span class="badge badge-pill badge-success" th:if="${stock.getTrend()>0}">Gain</span>
-                <span class="badge badge-pill badge-secondary" th:if="${stock.getTrend()==0}">Same</span>
-                <span class="badge badge-pill badge-danger" th:if="${stock.getTrend()<0}">Loss</span>
+                <span th:if="${valuable.type == T(com.epam.rd.stock.exchange.model.enums.ValuableType).STOCK}">Stock</span>
+                <span th:if="${valuable.type == T(com.epam.rd.stock.exchange.model.enums.ValuableType).CRYPTO}">Cryptocurrency</span>
+            <p class="card-text">Current price: <font th:text="${valuable.getPrice}"></font> $ </p>
+            <p class="card-text">Trend : <font th:text="${valuable.getTrend}"></font>
+                <span class="badge badge-pill badge-success" th:if="${valuable.getTrend()>0}">Gain</span>
+                <span class="badge badge-pill badge-secondary" th:if="${valuable.getTrend()==0}">Same</span>
+                <span class="badge badge-pill badge-danger" th:if="${valuable.getTrend()<0}">Loss</span>
+            <div class="btn-group">
             <div sec:authorize="hasAuthority('USER')">
-                <a class="btn btn-primary" th:href="@{/order(stockId=${stock.getId})}" role="button">Make an order</a>
+                <a class="btn btn-primary" th:href="@{/order(valuableId=${valuable.getId})}" role="button">Make an order</a>
             </div>
+            <div sec:authorize="hasAuthority('USER')">
+            <a href="#" th:href="@{/newSubscription(valuableId=${valuable.getId})}" class="btn btn-primary">Create subscription</a>
+            </div>
+            <a class="btn btn-primary" th:href="@{/valuableHistory(valuableId=${valuable.getId})}" role="button">Review history</a>
             </p>
+            </div>
         </div>
+    </div>
     </div>
 </div>
 <br>

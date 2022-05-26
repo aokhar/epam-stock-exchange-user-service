@@ -5,10 +5,312 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
-    <includeAll path="v-1.0/" relativeToChangelogFile="true"/>
-
     <changeSet id="1" author="Oleksii Kaliuha">
-        <tagDatabase tag="v.1.0"/>
+        <createTable tableName="user">
+            <column name="id" type="char(36)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="email" type="varchar(45)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="actual_email" type="varchar(45)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="first_name" type="nvarchar(45)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="nvarchar(45)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="balance" type="DECIMAL(12, 2)"/>
+            <column name="role" type="varchar(10)" defaultValue="USER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="char(60)"/>
+            <column name="is_blocked" type="boolean" defaultValue="false">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
     </changeSet>
+
+    <changeSet id="2" author="Oleksii Kaliuha">
+        <createTable tableName="valuable">
+            <column name="id" type="char(36)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="symbol" type="varchar(16)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="name" type="char(60)"/>
+            <column name="price" type="DECIMAL(12, 2)"/>
+            <column name="trend" type="DECIMAL(12, 2)"/>
+            <column name="type" type="varchar(10)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <insert tableName="valuable">
+            <column name="id">1</column>
+            <column name="name">Apple</column>
+            <column name="symbol">AAPL</column>
+            <column name="trend">-1.34</column>
+            <column name="price">134.91</column>
+            <column name="type">STOCK</column>
+        </insert>
+        <insert tableName="valuable">
+            <column name="id">2</column>
+            <column name="name">IBM</column>
+            <column name="symbol">IBM</column>
+            <column name="trend">2.63</column>
+            <column name="price">133.80</column>
+            <column name="type">STOCK</column>
+        </insert>
+        <insert tableName="valuable">
+            <column name="id">3</column>
+            <column name="name">Microsoft</column>
+            <column name="symbol">MSFT</column>
+            <column name="trend">-1.63</column>
+            <column name="price">256.93</column>
+            <column name="type">STOCK</column>
+        </insert>
+        <insert tableName="valuable">
+            <column name="id">4</column>
+            <column name="name">Amazon</column>
+            <column name="symbol">AMZN</column>
+            <column name="trend">-139.11</column>
+            <column name="price">3191</column>
+            <column name="type">STOCK</column>
+        </insert>
+        <insert tableName="valuable">
+            <column name="id">5</column>
+            <column name="name">EPAM</column>
+            <column name="symbol">EPAM</column>
+            <column name="trend">21.46</column>
+            <column name="price">308.87</column>
+            <column name="type">STOCK</column>
+        </insert>
+        <insert tableName="valuable">
+            <column name="id">6</column>
+            <column name="name">Google</column>
+            <column name="symbol">GOOGL</column>
+            <column name="trend">-110.36</column>
+            <column name="price">2111.40</column>
+            <column name="type">STOCK</column>
+        </insert>
+        <insert tableName="valuable">
+            <column name="id">7</column>
+            <column name="name">Tesla</column>
+            <column name="symbol">TSLA</column>
+            <column name="trend">-46.74</column>
+            <column name="price">628.16</column>
+            <column name="type">STOCK</column>
+        </insert>
+        <insert tableName="valuable">
+            <column name="id">8</column>
+            <column name="name">Bitcoin</column>
+            <column name="symbol">BTC</column>
+            <column name="trend">110.11</column>
+            <column name="price">29481</column>
+            <column name="type">CRYPTO</column>
+        </insert>
+        <insert tableName="valuable">
+            <column name="id">10</column>
+            <column name="name">Etherium</column>
+            <column name="symbol">ETH</column>
+            <column name="trend">-0.13</column>
+            <column name="price">1977.66</column>
+            <column name="type">CRYPTO</column>
+        </insert>
+    </changeSet>
+
+    <changeSet id="3" author="Oleksii Kaliuha">
+        <createTable tableName="orders">
+            <column name="id" type="char(36)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="user_id" type="char(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="valuable_id" type="char(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="amount" type="DECIMAL(12, 4)"/>
+            <column name="valuable_price" type="DECIMAL(12, 2)"/>
+            <column name="date_time" type="DATETIME(6)"/>
+            <column name="order_price" type="DECIMAL(12, 2)"/>
+            <column name="type" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fail_description" type="varchar(255)"/>
+            <column name="status" type="varchar(10)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+
+    <changeSet id="4" author="Oleksii Kaliuha">
+        <createTable tableName="user_valuables">
+            <column name="id" type="char(36)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="user_id" type="char(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="valuable_id" type="char(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="amount" type="DECIMAL(12, 4)"/>
+            <column name="amount_to_sell" type="DECIMAL(12, 4)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="5" author="Oleksii Kaliuha">
+        <createTable tableName="card">
+            <column name="id" type="char(36)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="card" type="bigint"/>
+            <column name="card_holder" type="char(36)"/>
+            <column name="expired_month" type="int" />
+            <column name="expired_year" type="int" />
+            <column name="cvc" type="int" />
+            <column name="user_id" type="char(36)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="6" author="Oleksii Kaliuha">
+        <createTable tableName="valuable_history">
+            <column name="id" type="char(36)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="valuable_id" type="char(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_time" type="DATETIME(6)"/>
+            <column name="previous_price" type="DECIMAL(12, 2)"/>
+            <column name="new_price" type="DECIMAL(12, 2)"/>
+            <column name="trend" type="DECIMAL(12, 2)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="7" author="Oleksii Kaliuha">
+        <createTable tableName="balance_update_history">
+            <column name="id" type="char(36)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="user_id" type="char(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_time" type="DATETIME(6)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="update_type" type="varchar(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="balance_update" type="DECIMAL(12, 2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="card" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="8" author="Oleksii Kaliuha">
+        <createTable tableName="subscription">
+            <column name="id" type="char(36)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="fail_safe" type="bit(1)"/>
+            <column name="amount" type="DECIMAL(12,4)"/>
+            <column name="reserve" type="bit(1)"/>
+            <column name="continuos" type="bit(1)"/>
+            <column name="type" type="varchar2(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="condition_type" type="varchar(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="operator" type="varchar2(20)"/>
+            <column name="price" type="DECIMAL(12,2)"/>
+            <column name="low" type="DECIMAL(12,2)"/>
+            <column name="high" type="DECIMAL(12,2)"/>
+            <column name="user_id" type="char(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="valuable_id" type="char(36)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="9" author="Oleksii Kaliuha">
+        <createTable tableName="alert">
+            <column name="id" type="char(36)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="user_id" type="char(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="message" type="varchar2(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_time" type="DATETIME(6)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+
+    <changeSet id="10" author="Oleksii Kaliuha">
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="user_valuables"
+                                 constraintName="fk_user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="user"/>
+        <addForeignKeyConstraint baseColumnNames="valuable_id"
+                                 baseTableName="user_valuables"
+                                 constraintName="fk_valuable_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="valuable"/>
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="orders"
+                                 constraintName="fk_orders_user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="user"/>
+        <addForeignKeyConstraint baseColumnNames="valuable_id"
+                                 baseTableName="orders"
+                                 constraintName="fk_orders_valuable_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="valuable"/>
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="card"
+                                 constraintName="fk_card_user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="user"/>
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="balance_update_history"
+                                 constraintName="fk_balance_update_history_user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="user"/>
+        <addForeignKeyConstraint baseColumnNames="valuable_id"
+                                 baseTableName="valuable_history"
+                                 constraintName="fk_valuable_history_valuable_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="valuable"/>
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="subscription"
+                                 constraintName="fk_subscription_user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="user"/>
+        <addForeignKeyConstraint baseColumnNames="valuable_id"
+                                 baseTableName="subscription"
+                                 constraintName="fk_subscription_valuable_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="valuable"/>
+    </changeSet>
+
 
 </databaseChangeLog>

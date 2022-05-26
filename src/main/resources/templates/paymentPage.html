@@ -159,25 +159,29 @@
 </head>
 
 <body>
-<div><header th:insert="/paymentForm.html :: header"> </header></div>
+<div><header th:insert="/header.html :: header"> </header></div>
 <main class="page payment-page">
     <section class="payment-form dark">
         <div class="container">
-            <form method="post" th:action="@{/updateBalance}" th:object="${walletUpdate}" novalidate>
-                <div>
-                    <input th:id="id" th:name="id" type="hidden" name="userId" th:value="${walletUpdate.id}"/>
-                    <input th:id="userId" th:name="userId" type="hidden" name="userId" th:value="${walletUpdate.userId}"/>
-                </div>
+            <form method="post" th:action="@{/updateBalance}" th:object="${balanceUpdate}" novalidate>
                 <div class="products">
                     <h3 class="title">Checkout</h3>
-                    <div class="item">
-                        <input type='hidden' th:id="balance" th:name="balance"  th:value="${walletUpdate.balance}" value="3" class="field left" readonly>
-                    </div>
                     <div class="item">
                         <label for="sum">Enter sum:</label>
                         <input th:field="*{sum}" id="sum" type="number" class="form-control" placeholder="Sum"
                                aria-label="Sum" aria-describedby="basic-addon1" required>
                         <div th:if="${#fields.hasErrors('sum')}" th:errors="*{sum}" class="alert alert-danger">Sum error</div>
+                    </div>
+                    <div class="item">
+                        <label for="sum">Save card:</label>
+                        <input th:field="*{saveCard}" type="checkbox" name="saveCard"
+                               aria-label="Sum" aria-describedby="basic-addon1" checked >
+                    </div>
+                    <div class="item">
+                        <label for="sum">Change Balance Type:</label>
+                        <select class="form-control" th:field="*{changeBalanceType}" name="changeBalanceType">
+                            <option th:each="changeBalanceType : ${T(com.epam.rd.stock.exchange.dto.enums.ChangeBalanceType).values()}" th:value="${changeBalanceType}" th:text="${changeBalanceType}"></option>
+                        </select>
                     </div>
                 </div>
                 <div class="card-details">
@@ -185,7 +189,7 @@
                     <div class="row">
                         <div class="form-group col-sm-7">
                             <label for="card-holder">Card Holder</label>
-                            <input th:id="cardHolder" th:name="cardHolder" th:value="${walletUpdate.cardHolder}" id="card-holder" type="text" class="form-control"
+                            <input th:id="cardHolder" th:name="cardHolder" th:value="${balanceUpdate.cardHolder}" id="card-holder" type="text" class="form-control"
                                    placeholder="Card Holder" aria-label="Card Holder" aria-describedby="basic-addon1"
                                    required>
                             <div th:if="${#fields.hasErrors('cardHolder')}" th:errors="*{cardHolder}" class="alert alert-danger">CardHolder error
@@ -194,25 +198,25 @@
                         <div class="form-group col-sm-5">
                             <label>Expiration Date</label>
                             <div class="input-group expiration-date">
-                                <input id="expMonth" th:id="expMonth" th:name="expMonth" th:value="${walletUpdate.expMonth}"  type="number" class="form-control" placeholder="MM"
+                                <input id="expMonth" th:id="expMonth" th:name="expMonth" th:value="${balanceUpdate.expMonth}"  type="number" class="form-control" placeholder="MM"
                                        aria-label="MM" aria-describedby="basic-addon1">
                                 <div th:if="${#fields.hasErrors('expMonth')}" th:errors="*{expMonth}" class="alert alert-danger">ExpMonth error
                                 </div>
                                 <span class="date-separator">/</span>
-                                <input id="expYear" th:id="expYear" th:name="expYear" th:value="${walletUpdate.expYear}"  type="number" class="form-control" placeholder="YY"
+                                <input id="expYear" th:id="expYear" th:name="expYear" th:value="${balanceUpdate.expYear}"  type="number" class="form-control" placeholder="YY"
                                        aria-label="YY" aria-describedby="basic-addon1">
                                 <div th:if="${#fields.hasErrors('expYear')}" th:errors="*{expYear}" class="alert alert-danger">ExpYear error</div>
                             </div>
                         </div>
                         <div class="form-group col-sm-8">
                             <label for="card">Card Number</label>
-                            <input id="card" th:id="card" th:name="card" th:value="${walletUpdate.card}"  type="number" class="form-control"
+                            <input id="card" th:id="card" th:name="card" th:value="${balanceUpdate.card}"  type="number" class="form-control"
                                    placeholder="Card Number" aria-label="Card Holder" aria-describedby="basic-addon1">
                             <div th:if="${#fields.hasErrors('card')}" th:errors="*{card}" class="alert alert-danger">Card error</div>
                         </div>
                         <div class="form-group col-sm-4">
                             <label for="cvc">CVC</label>
-                            <input id="cvc" th:id="cvc" th:name="cvc" th:value = "${walletUpdate.cvc}"  type="number" class="form-control" placeholder="CVC"
+                            <input id="cvc" th:id="cvc" th:name="cvc" th:value = "${balanceUpdate.cvc}"  type="number" class="form-control" placeholder="CVC"
                                    aria-label="Card Holder" aria-describedby="basic-addon1">
                             <div th:if="${#fields.hasErrors('cvc')}" th:errors="*{cvc}" class="alert alert-danger">CVC error</div>
                         </div>

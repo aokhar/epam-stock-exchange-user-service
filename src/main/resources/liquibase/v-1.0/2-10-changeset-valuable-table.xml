@@ -20,6 +20,78 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+        <insert tableName="valuable">
+            <column name="id">1</column>
+            <column name="name">Apple</column>
+            <column name="symbol">AAPL</column>
+            <column name="trend">-1.34</column>
+            <column name="price">134.91</column>
+            <column name="type">STOCK</column>
+        </insert>
+        <insert tableName="valuable">
+            <column name="id">2</column>
+            <column name="name">IBM</column>
+            <column name="symbol">IBM</column>
+            <column name="trend">2.63</column>
+            <column name="price">133.80</column>
+            <column name="type">STOCK</column>
+        </insert>
+        <insert tableName="valuable">
+            <column name="id">3</column>
+            <column name="name">Microsoft</column>
+            <column name="symbol">MSFT</column>
+            <column name="trend">-1.63</column>
+            <column name="price">256.93</column>
+            <column name="type">STOCK</column>
+        </insert>
+        <insert tableName="valuable">
+            <column name="id">4</column>
+            <column name="name">Amazon</column>
+            <column name="symbol">AMZN</column>
+            <column name="trend">-139.11</column>
+            <column name="price">3191</column>
+            <column name="type">STOCK</column>
+        </insert>
+        <insert tableName="valuable">
+            <column name="id">5</column>
+            <column name="name">EPAM</column>
+            <column name="symbol">EPAM</column>
+            <column name="trend">21.46</column>
+            <column name="price">308.87</column>
+            <column name="type">STOCK</column>
+        </insert>
+        <insert tableName="valuable">
+            <column name="id">6</column>
+            <column name="name">Google</column>
+            <column name="symbol">GOOGL</column>
+            <column name="trend">-110.36</column>
+            <column name="price">2111.40</column>
+            <column name="type">STOCK</column>
+        </insert>
+        <insert tableName="valuable">
+            <column name="id">7</column>
+            <column name="name">Tesla</column>
+            <column name="symbol">TSLA</column>
+            <column name="trend">-46.74</column>
+            <column name="price">628.16</column>
+            <column name="type">STOCK</column>
+        </insert>
+        <insert tableName="valuable">
+            <column name="id">8</column>
+            <column name="name">Bitcoin</column>
+            <column name="symbol">BTC</column>
+            <column name="trend">110.11</column>
+            <column name="price">29481</column>
+            <column name="type">CRYPTO</column>
+        </insert>
+        <insert tableName="valuable">
+            <column name="id">10</column>
+            <column name="name">Etherium</column>
+            <column name="symbol">ETH</column>
+            <column name="trend">-0.13</column>
+            <column name="price">1977.66</column>
+            <column name="type">CRYPTO</column>
+        </insert>
     </changeSet>
 
 </databaseChangeLog>

@@ -33,12 +33,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Page<Order> findByUserIdAndStatus(String userId, OrderStatus status, Pageable pageable) {
-        return orderRepository.findByUserAndStatusOrderByTimeSubmittedDesc(userRepository.findById(userId).get(), status, pageable);
+        return orderRepository.findByUserAndStatusOrderByDateTimeDesc(userRepository.findById(userId).get(), status, pageable);
     }
 
     @Override
     public Page<Order> findByUserId(String userId, Pageable pageable) {
-        return orderRepository.findByUserOrderByTimeSubmittedDesc(userRepository.findById(userId).get(), pageable);
+        return orderRepository.findByUserOrderByDateTimeDesc(userRepository.findById(userId).get(), pageable);
     }
 
     @Override

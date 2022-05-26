@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>New Subscription</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+</head>
+<body>
+<div>
+    <header th:insert="/header.html :: header"></header>
+</div>
+<br>
+<div class='wrapper text-center'>
+    <h1>Type</h1>
+    <div class="btn-group">
+        <a href="#" th:href="'/newSubscription?subscriptionType=SELL&conditionType='+${conditionType}+'&valuableId='+${valuableId}" class="btn btn-primary btn-sm" aria-current="page">SELL</a>
+        <a href="#" th:href="'/newSubscription?subscriptionType=BUY&conditionType='+${conditionType}+'&valuableId='+${valuableId}" class="btn btn-primary btn-sm">BUY</a>
+        <a href="#" th:href="'/newSubscription?subscriptionType=INFORM&conditionType='+${conditionType}+'&valuableId='+${valuableId}" class="btn btn-primary btn-sm">INFORM</a>
+    </div>
+</div>
+<br>
+<div class='wrapper text-center'>
+    <h2>Condition</h2>
+    <div class="btn-group">
+        <a href="#" th:href="'/newSubscription?conditionType=STOP_LOSS_AND_TAKE_PROFIT&subscriptionType='+${subscriptionType}+'&valuableId='+${valuableId}" class="btn btn-primary btn-sm" aria-current="page">Stop loss , take profit</a>
+        <a href="#" th:href="'/newSubscription?conditionType=LIMITS&subscriptionType='+${subscriptionType}+'&valuableId='+${valuableId}" class="btn btn-primary btn-sm">Limit</a>
+        <a href="#" th:href="'/newSubscription?conditionType=DEFAULT&subscriptionType='+${subscriptionType}+'&valuableId='+${valuableId}" class="btn btn-primary btn-sm">Default</a>
+    </div>
+    <br>
+    <div class="container">
+
+        <form method="post" th:action="@{/newSubscription}" th:object="${newSubscription}">
+
+            <div class="form-group">
+                <br>
+                <label>Subscription type: <font th:text="${subscriptionType}"> </font> with condition: <font th:text="${conditionType}"> </font> for <font th:text="${valuable.type}"> </font> valuable <font th:text="${valuable.symbol}"> </font></label>
+                <input th:value="${valuableId}" hidden th:field="*{valuableId}"/>
+                <input th:value="${subscriptionType}" hidden th:field="*{subscriptionType}"/>
+                <input th:value="${conditionType}" hidden th:field="*{conditionType}"/>
+            </div>
+
+            <div th:if=" ${subscriptionType!=T(com.epam.rd.stock.exchange.model.enums.SubscriptionType).INFORM}">
+            <div class="form-group">
+                <label>Fail safe</label>
+                <select id="failSafe" name="failSafe" th:field ="*{failSafe}">
+                    <option value="true" selected>True</option>
+                    <option value="false">False</option>
+                </select>
+            </div>
+
+
+            <div class="form-group" th:if=" ${subscriptionType==T(com.epam.rd.stock.exchange.model.enums.SubscriptionType).SELL}">
+                <label>Reserve</label>
+                <select id="reserve" name="reserve" th:field ="*{reserve}">
+                    <option value="true" selected>True</option>
+                    <option value="false">False</option>
+                </select>
+            </div>
+
+            </div>
+
+            <div class="form-group" th:if=" ${subscriptionType==T(com.epam.rd.stock.exchange.model.enums.SubscriptionType).INFORM}">
+                <label>Continuos</label>
+                <select id="continuos" name="continuos" th:field ="*{continuos}">
+                    <option value="true" >True</option>
+                    <option value="false">False</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="amountDiv" th:if=" ${subscriptionType!=T(com.epam.rd.stock.exchange.model.enums.SubscriptionType).INFORM}">
+                <label class="control-label" for="amount"> Amount </label>
+                <input id="amount" class="form-control" th:field="*{amount}" required autofocus="autofocus"/>
+                <div th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}" class="alert alert-danger">Amount
+                    error
+                </div>
+            </div>
+
+            <div class="form-group" th:if="${conditionType==T(com.epam.rd.stock.exchange.model.enums.ConditionType).LIMITS}">
+                <label class="control-label" for="amount"> Limit </label>
+                <label class="control-label" for="amount"> Lower limit </label>
+                <input id="lowerLimit" class="form-control" th:field="*{low}" required autofocus="autofocus"/>
+                <label class="control-label" for="amount"> Higher limit </label>
+                <input id="higherLimit" class="form-control" th:field="*{high}" required autofocus="autofocus"/>
+                </div>
+
+            <div class="form-group" th:if="${conditionType==T(com.epam.rd.stock.exchange.model.enums.ConditionType).STOP_LOSS_AND_TAKE_PROFIT}">
+                <label class="control-label" for="amount">Stop loss </label>
+                <input id="stopLoss" class="form-control" th:field="*{low}" required autofocus="autofocus"/>
+                <label class="control-label" for="amount">Take profit</label>
+                <input id="takeProfit" class="form-control" th:field="*{high}" required autofocus="autofocus"/>
+            </div>
+
+            <div class="form-group" th:if="${conditionType==T(com.epam.rd.stock.exchange.model.enums.ConditionType).DEFAULT}">
+                <label class="control-label" for="amount"> Price </label>
+                <input id="price" class="form-control" th:field="*{price}" required autofocus="autofocus"/>
+                <select id="operator" name="operator" th:field ="*{operator}">
+                    <option th:value="${T(com.epam.rd.stock.exchange.model.enums.Operator).EQUALS}" selected>=</option>
+                    <option th:value="${T(com.epam.rd.stock.exchange.model.enums.Operator).LOWER}"><</option>
+                    <option th:value="${T(com.epam.rd.stock.exchange.model.enums.Operator).GREATER}">></option>
+                    <option th:value="${T(com.epam.rd.stock.exchange.model.enums.Operator).LOWER_AND_EQUALS}"><=</option>
+                    <option th:value="${T(com.epam.rd.stock.exchange.model.enums.Operator).GREATER_AND_EQUALS}">>=</option>
+                </select>
+                </div>
+
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Create</button>
+            </div>
+        </form>
+</div>
+</div>
+</body>
+</html>

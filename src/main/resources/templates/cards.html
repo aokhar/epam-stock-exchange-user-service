@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cards</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+</head>
+<body>
+<div>
+    <header th:insert="/header.html :: header"></header>
+    <br>
+    <div class='wrapper text-center'>
+        <div class="btn-group">
+            <a href="#" th:href="@{'/updateBalance'}" class="btn btn-primary btn-sm">Update Balance</a>
+            <a href="#" th:href="@{'/newCard'}" class="btn btn-primary btn-sm">Add New Card</a>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-sm-4" th:each="card : ${cards}">
+        <div class="card" >
+            <div class="card-body">
+                <h1 class="card-title" align="center" th:text="${card.card}"></h1>
+                <p class="card-text"><font th:text="${card.cardHolder}"></font></p>
+                <p class="card-text"><font th:text="${card.cvc}"></font></p>
+                <p class="card-text"><font th:text="${card.expMonth}+'/'+${card.expYear}"></font></p>
+                <div class='wrapper text-center'>
+                    <div class="btn-group">
+                        <a href="#" th:href="@{'/updateBalance?cardId='+${card.id}}" class="btn btn-primary btn-sm">Update Balance</a>
+                        <a href="#" th:href="@{'/updateCard?cardId='+${card.id}}" class="btn btn-primary btn-sm">Update</a>
+                        <form method="post" th:action="@{/deleteCard}">
+                            <input th:value="${card.id}" id="cardId" name="cardId" hidden>
+                            <button type="submit" class="btn btn-primary btn-sm">Delete Card</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    <br>
+    <div th:if="${totalPages > 1}">
+        <div class="row col-sm-10">
+            <div class="col-sm-2">
+                Total Rows: [[${totalItems}]]
+            </div>
+            <div class="col-sm-1">
+					<span th:each="i: ${#numbers.sequence(1, totalPages)}">
+						<a th:if="${currentPage != i}" th:href="@{'/?pageNumber=' + ${i}}">[[${i}]]</a>
+						<span th:unless="${currentPage != i}">[[${i}]]</span>  &nbsp; &nbsp;
+					</span>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

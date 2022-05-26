@@ -19,34 +19,35 @@
 </head>
 <body>
 <div>
-    <header th:insert="/paymentForm.html :: header"></header>
+    <header th:insert="/header.html :: header"></header>
 </div>
 <div class="container">
 
-    <h2>Portfolio</h2>
-    <h1 th:text="${user.firstname} + ' ' + ${user.lastname}"/>
-
-    My items
+    <br>
+    <h2 align="center">Portfolio</h2>
+    <h1 align="center" th:text="${user.firstname} + ' ' + ${user.lastname}"/>
+    <br>
     <table class="table table-bordered table-hover" id="itemsList">
         <thead>
         <tr>
+            <th>Type</th>
             <th>Symbol</th>
             <th>Price</th>
             <th>Trend</th>
             <th>Amount you have</th>
-            <th>Stop-loss</th>
-            <th>Take-profit</th>
             <th>Amount to sell</th>
-            <th>Action</th>
+            <th>Sell/Buy</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="stock : ${user.stocks}">
-            <td th:text="${stock.symbol}"></td>
-            <td th:text="${stock.price}"></td>
-            <td th:text="${stock.trend}"></td>
-            <td th:text="${stock.amount}"></td>
-            <td><a class="btn btn-primary" th:href="@{/updateUserStockInfo(userStockInfoId=${stock.id})}" role="button">Set take-profit/stop-loss</a></td>
+        <tr th:each="valuable : ${user.valuables}">
+            <td th:text="${valuable.type}"></td>
+            <td th:text="${valuable.symbol}"></td>
+            <td th:text="${valuable.price}"></td>
+            <td th:text="${valuable.trend}"></td>
+            <td th:text="${valuable.amount}"></td>
+            <td th:text="${valuable.amountToSell}"></td>
+            <td><a th:href="'/order?valuableId='+${valuable.valuableId}">Sell/Buy</a></td>
         </tr>
         </tbody>
     </table>

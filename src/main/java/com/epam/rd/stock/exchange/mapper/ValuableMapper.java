@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ValuableMapper {
-    public ValuableViewDto toStockDto(Valuable valuable) {
+    public ValuableViewDto toValuableDto(Valuable valuable) {
         return ValuableViewDto.builder()
                 .id(valuable.getId())
                 .price(valuable.getPrice())
@@ -18,7 +18,7 @@ public class ValuableMapper {
                 .build();
     }
 
-    public Page<ValuableViewDto> toPageStockDto(Page<Valuable> valuables) {
-        return valuables.map(this::toStockDto);
+    public Page<ValuableViewDto> toPageValuableDto(Page<Valuable> valuables) {
+        return valuables.map(this::toValuableDto);
     }
 }

@@ -13,7 +13,6 @@ public class OrderMapper {
     public Order toOrder(Valuable valuable, User user, OrderCreateDto orderCreateDto) {
         return Order.builder()
                 .amount(orderCreateDto.getAmount())
-                .valuablePrice(orderCreateDto.getValuablePrice())
                 .valuable(valuable)
                 .user(user)
                 .type(orderCreateDto.getType())
@@ -25,6 +24,8 @@ public class OrderMapper {
                 .id(order.getId())
                 .valuable(order.getValuable())
                 .user(order.getUser())
+                .status(order.getStatus())
+                .failDescription(order.getFailDescription())
                 .orderPrice(order.getOrderPrice())
                 .valuablePrice(order.getValuablePrice())
                 .type(order.getType())

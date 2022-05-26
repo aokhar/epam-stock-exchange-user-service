@@ -16,8 +16,8 @@
             <column name="valuable_id" type="char(36)">
                 <constraints nullable="false"/>
             </column>
-            <column name="amount" type="int"/>
-            <column name="amount_to_sell" type="int"/>
+            <column name="amount" type="DECIMAL(12, 4)"/>
+            <column name="amount_to_sell" type="DECIMAL(12, 4)"/>
         </createTable>
     </changeSet>
 

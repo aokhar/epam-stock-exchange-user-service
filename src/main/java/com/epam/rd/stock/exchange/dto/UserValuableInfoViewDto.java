@@ -15,9 +15,10 @@ import java.math.BigDecimal;
 public class UserValuableInfoViewDto {
     private String id;
     private String symbol;
+    private String valuableId;
     private ValuableType type;
     private BigDecimal price;
     private BigDecimal trend;
-    private Integer amount;
-    private Integer amountToSell;
+    private BigDecimal amount;
+    private BigDecimal amountToSell;
 }

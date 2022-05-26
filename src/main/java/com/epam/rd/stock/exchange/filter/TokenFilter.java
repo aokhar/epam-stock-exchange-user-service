@@ -4,10 +4,11 @@ import com.epam.rd.stock.exchange.dto.UserViewDto;
 import com.epam.rd.stock.exchange.exception.InvalidTokenException;
 import com.epam.rd.stock.exchange.exception.UserBlockedException;
 import com.epam.rd.stock.exchange.facade.UserFacade;
-import com.epam.rd.stock.exchange.facade.WalletFacade;
 import com.epam.rd.stock.exchange.mapper.UserMapper;
-import com.epam.rd.stock.exchange.model.User;
+import com.epam.rd.stock.exchange.service.AlertService;
 import com.epam.rd.stock.exchange.service.AuthenticationService;
+import com.epam.rd.stock.exchange.service.UserService;
+import com.epam.rd.stock.exchange.service.ValuableService;
 import com.epam.rd.stock.exchange.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -51,7 +52,7 @@ public class TokenFilter extends OncePerRequestFilter {
 
     private final JwtTokenUtil jwtTokenUtil;
 
-    private final WalletFacade walletFacade;
+    private final AlertService alertService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -94,9 +95,11 @@ public class TokenFilter extends OncePerRequestFilter {
         try {
             String userId = jwtTokenUtil.getUserIdFromToken(csrfToken.getToken(), request);
             UserViewDto user = userFacade.findById(userId);
+            boolean notificate = alertService.checkAlerts(userId);
             String email = user.getEmail();
             BigDecimal balance = user.getBalance();
             HttpSession session = request.getSession();
+            session.setAttribute("notificate", notificate);
             session.setAttribute("email", email);
             session.setAttribute("balance", balance);
         } catch (InvalidTokenException e) {
